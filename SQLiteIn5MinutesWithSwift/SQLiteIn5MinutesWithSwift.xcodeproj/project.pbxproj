@@ -8,10 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		491077681D036CD60028D69D /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 491077671D036CD60028D69D /* libsqlite3.tbd */; };
-		4910776B1D0379B70028D69D /* callbackBasic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4910776A1D0379B70028D69D /* callbackBasic.swift */; };
-		4910776D1D0379FC0028D69D /* closureBasic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4910776C1D0379FC0028D69D /* closureBasic.swift */; };
-		4910776F1D037A0C0028D69D /* closureResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4910776E1D037A0C0028D69D /* closureResults.swift */; };
-		491077711D0382550028D69D /* command.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491077701D0382550028D69D /* command.swift */; };
+		4910776B1D0379B70028D69D /* CallbackBasic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4910776A1D0379B70028D69D /* CallbackBasic.swift */; };
+		4910776D1D0379FC0028D69D /* ClosureBasic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4910776C1D0379FC0028D69D /* ClosureBasic.swift */; };
+		4910776F1D037A0C0028D69D /* ClosureResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4910776E1D037A0C0028D69D /* ClosureResults.swift */; };
+		491077711D0382550028D69D /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491077701D0382550028D69D /* Command.swift */; };
+		4910777B1D03D5A20028D69D /* Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4910777A1D03D5A20028D69D /* Details.swift */; };
+		499710611D049A840069DA2E /* SqlQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499710601D049A840069DA2E /* SqlQuery.swift */; };
 		49F68D7E1D034921008C79E5 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F68D7D1D034921008C79E5 /* main.swift */; };
 /* End PBXBuildFile section */
 
@@ -30,10 +32,12 @@
 /* Begin PBXFileReference section */
 		491077671D036CD60028D69D /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		491077691D036DAD0028D69D /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
-		4910776A1D0379B70028D69D /* callbackBasic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = callbackBasic.swift; sourceTree = "<group>"; };
-		4910776C1D0379FC0028D69D /* closureBasic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = closureBasic.swift; sourceTree = "<group>"; };
-		4910776E1D037A0C0028D69D /* closureResults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = closureResults.swift; sourceTree = "<group>"; };
-		491077701D0382550028D69D /* command.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = command.swift; sourceTree = "<group>"; };
+		4910776A1D0379B70028D69D /* CallbackBasic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallbackBasic.swift; sourceTree = "<group>"; };
+		4910776C1D0379FC0028D69D /* ClosureBasic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClosureBasic.swift; sourceTree = "<group>"; };
+		4910776E1D037A0C0028D69D /* ClosureResults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClosureResults.swift; sourceTree = "<group>"; };
+		491077701D0382550028D69D /* Command.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
+		4910777A1D03D5A20028D69D /* Details.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Details.swift; sourceTree = "<group>"; };
+		499710601D049A840069DA2E /* SqlQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SqlQuery.swift; sourceTree = "<group>"; };
 		49F68D7A1D034921008C79E5 /* SQLiteIn5MinutesWithSwift */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SQLiteIn5MinutesWithSwift; sourceTree = BUILT_PRODUCTS_DIR; };
 		49F68D7D1D034921008C79E5 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -71,10 +75,12 @@
 			isa = PBXGroup;
 			children = (
 				49F68D7D1D034921008C79E5 /* main.swift */,
-				4910776A1D0379B70028D69D /* callbackBasic.swift */,
-				4910776C1D0379FC0028D69D /* closureBasic.swift */,
-				4910776E1D037A0C0028D69D /* closureResults.swift */,
-				491077701D0382550028D69D /* command.swift */,
+				4910776A1D0379B70028D69D /* CallbackBasic.swift */,
+				4910776C1D0379FC0028D69D /* ClosureBasic.swift */,
+				4910776E1D037A0C0028D69D /* ClosureResults.swift */,
+				491077701D0382550028D69D /* Command.swift */,
+				4910777A1D03D5A20028D69D /* Details.swift */,
+				499710601D049A840069DA2E /* SqlQuery.swift */,
 				491077691D036DAD0028D69D /* Bridging-Header.h */,
 			);
 			path = SQLiteIn5MinutesWithSwift;
@@ -137,10 +143,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4910776D1D0379FC0028D69D /* closureBasic.swift in Sources */,
-				4910776B1D0379B70028D69D /* callbackBasic.swift in Sources */,
-				4910776F1D037A0C0028D69D /* closureResults.swift in Sources */,
-				491077711D0382550028D69D /* command.swift in Sources */,
+				4910776D1D0379FC0028D69D /* ClosureBasic.swift in Sources */,
+				4910776B1D0379B70028D69D /* CallbackBasic.swift in Sources */,
+				499710611D049A840069DA2E /* SqlQuery.swift in Sources */,
+				4910776F1D037A0C0028D69D /* ClosureResults.swift in Sources */,
+				4910777B1D03D5A20028D69D /* Details.swift in Sources */,
+				491077711D0382550028D69D /* Command.swift in Sources */,
 				49F68D7E1D034921008C79E5 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

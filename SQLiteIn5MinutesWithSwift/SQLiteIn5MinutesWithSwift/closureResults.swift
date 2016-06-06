@@ -1,5 +1,5 @@
 //
-//  closureResults.swift
+//  ClosureResults.swift
 //  SQLiteIn5MinutesWithSwift
 //
 //  Created by marc on 2016.06.04.
@@ -8,6 +8,9 @@
 
 import Foundation
 
+/**
+ Query result as an array of rows. Each row is a Dictionary of column:value pairs.
+ */
 class Result {
     class Row {
         var data: [String: String]

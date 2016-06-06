@@ -1,6 +1,6 @@
 # 004.65.sql-sqlite-in-5-minutes
 
-Based on ["SQLite in 5 minutes or less"](https://sqlite.org/quickstart.html) at [sqlite.org](https://sqlite.org/).  This implementation is for Swift.
+Based on ["SQLite in 5 minutes or less"](https://sqlite.org/quickstart.html) at [sqlite.org](https://sqlite.org/).  This implementation is for Swift 2.2.
 
 
 ## Xcode Project Setup
@@ -26,7 +26,17 @@ Based on ["SQLite in 5 minutes or less"](https://sqlite.org/quickstart.html) at 
 
 ## Code
 
-Some `typealias` for readability.
+Each file contains a varied approach for accessing an SQLite database using Swift.
+
+• `main.swift` - exercises all of the approaches.  
+• `CallbackBasic.swift` - closest to sqlite.org example. _C style._  
+• `ClosureBasic.swift` - replaces `callback` function with literal closure. _C style._  
+• `ClosureResults.swift` - return `Array` of gathered row `Dictionaries`. _Swift style._  
+• `Command.swift` - execute an SQL statement which does not return any row data.  
+• `Details.swift` - example with prepare, step, column, and finalize.  
+• `SqlQuery.swift` - example `class` with prepare, bind, step, column, and finalize.  
+
+**`main.swift`** Provides `typealias` used by each example.
 
 ~~~swift
 typealias sqlite3 = COpaquePointer
@@ -38,7 +48,7 @@ typealias CVoidPointer = UnsafeMutablePointer<Void>
 *Note: The Swift `callback` can be either a global, non-instance procedure `func` or a non-capturing literal closure `{}`.*
 
 
-**C-Style Callback**  
+**`CallbackBasic.swift` C Style Callback**  
 
 ~~~swift
 func callback(
@@ -89,7 +99,7 @@ func sqlQueryCallbackBasic(argc: Int, argv: [String]) -> Int {
 }
 ~~~
 
-**Swift Closure, C-Style Names**  
+**`ClosureBasic.swift` Swift Closure. C Style.**  
 
 ~~~swift
 func sqlQueryClosureBasic(argc argc: Int, argv: [String]) -> Int {
@@ -145,7 +155,7 @@ func sqlQueryClosureBasic(argc argc: Int, argv: [String]) -> Int {
 ~~~
 
 
-**Swift Closure with Results Array**  
+**`closureResults.swift` Swift Closure. Returns Array\<Dictionary\>.**  
 
 ~~~swift
 class Result {
@@ -215,4 +225,4 @@ func sqlQueryClosureWithResults(path path: String, sql: String) -> [Result.Row] 
 }
 ~~~
 
-Enjoy your "5-minutes".
+May your "5-minutes" be less than the "5-minutes" needed to prepare this project. Cheers. :-)

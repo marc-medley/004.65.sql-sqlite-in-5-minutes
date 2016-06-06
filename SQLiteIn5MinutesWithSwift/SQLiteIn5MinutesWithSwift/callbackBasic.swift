@@ -1,5 +1,5 @@
 //
-//  minimalExample.swift
+//  CallbackBasic.swift
 //  SQLiteIn5MinutesWithSwift
 //
 //  Created by marc on 2016.06.04.
