@@ -14,11 +14,11 @@ typealias CCharHandle = UnsafeMutablePointer<UnsafeMutablePointer<CChar>>
 typealias CCharPointer = UnsafeMutablePointer<CChar>
 typealias CVoidPointer = UnsafeMutablePointer<Void>
 
-// SETUP DATABASE
+// SETUP DATABASE BEGINS ... exec non-callback commands open, create table & insert data
 var argv = [
     "sqlCommand", 
     "example.sqlitedb", 
-    "DROP TABLE people;"
+    "DROP TABLE IF EXISTS people;"
 ]
 sqlCommand(argc: argv.count, argv: argv)
 
@@ -45,6 +45,7 @@ sqlCommand(
     path: "example.sqlitedb", 
     sql: "INSERT INTO people VALUES ('Zay', '2000-01-01', 2, 55.23);"
 )
+// SETUP DATABASE COMPLETE.
 
 // EXAMPLE CallbackBasic.swift: Basic C-Style Callback
 print(":: Query Database, Basic Callback ::")

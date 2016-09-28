@@ -75,10 +75,10 @@
 			isa = PBXGroup;
 			children = (
 				49F68D7D1D034921008C79E5 /* main.swift */,
+				491077701D0382550028D69D /* Command.swift */,
 				4910776A1D0379B70028D69D /* CallbackBasic.swift */,
 				4910776C1D0379FC0028D69D /* ClosureBasic.swift */,
 				4910776E1D037A0C0028D69D /* ClosureResults.swift */,
-				491077701D0382550028D69D /* Command.swift */,
 				4910777A1D03D5A20028D69D /* Details.swift */,
 				499710601D049A840069DA2E /* SqlQuery.swift */,
 				491077691D036DAD0028D69D /* Bridging-Header.h */,

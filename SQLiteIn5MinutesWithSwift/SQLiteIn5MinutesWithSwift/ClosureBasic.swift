@@ -13,7 +13,6 @@ import Foundation
  - parameter argv: C-style argument values array
  - returns: integer result code. 0 for success.
  */
-// int main(int argc, char **argv) {
 func sqlQueryClosureBasic(argc argc: Int, argv: [String]) -> Int {
     var db: sqlite3 = nil 
     var zErrMsg:CCharPointer = nil
