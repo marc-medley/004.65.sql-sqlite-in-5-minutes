@@ -13,9 +13,9 @@ import Foundation
  - parameter argv: C-style argument values array
  - returns: integer result code. 0 for success.
  */
-func sqlQueryClosureBasic(argc argc: Int, argv: [String]) -> Int {
-    var db: sqlite3 = nil 
-    var zErrMsg:CCharPointer = nil
+func sqlQueryClosureBasic(argc: Int, argv: [String]) -> Int {
+    var db: sqlite3? = nil 
+    var zErrMsg:CCharPointer? = nil
     var rc: Int32 = 0
     
     if argc != 3 {
@@ -25,7 +25,7 @@ func sqlQueryClosureBasic(argc argc: Int, argv: [String]) -> Int {
     
     rc = sqlite3_open(argv[1], &db)
     if  rc != 0 {
-        print("ERROR: sqlite3_open " + String.fromCString(sqlite3_errmsg(db))! ?? "" )
+        print("ERROR: sqlite3_open " + String(cString: sqlite3_errmsg(db)) ?? "" )
         sqlite3_close(db)
         return 1
     }
@@ -34,16 +34,16 @@ func sqlQueryClosureBasic(argc argc: Int, argv: [String]) -> Int {
         db,      // database 
         argv[2], // statement
         {        // callback: non-capturing closure
-            resultVoidPointer, columnCount, values, columns in
-            
+            resultVoidPointer, columnCount, values, names in
+            // resultVoidPointer is unused
             for i in 0 ..< Int(columnCount) {
-                guard let value = String.fromCString(values[i]) else {
-                    print("No value")
+                guard let value = String(validatingUTF8: values[i]) else {
+                    print("No column value")
                     continue
                 }
                 
-                guard let column = String.fromCString(columns[i]) else {
-                    print("No column")
+                guard let column = String(validatingUTF8: names[i]) else {
+                    print("No column name")
                     continue
                 }
                 print("\(column) = \(value)")
@@ -55,7 +55,7 @@ func sqlQueryClosureBasic(argc argc: Int, argv: [String]) -> Int {
     )
     
     if rc != SQLITE_OK {
-        let errorMsg = String.fromCString(zErrMsg)! ?? ""
+        let errorMsg = String(cString: zErrMsg!) ?? ""
         print("ERROR: sqlite3_exec \(errorMsg)")
         sqlite3_free(zErrMsg)
     }

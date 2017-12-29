@@ -9,10 +9,10 @@
 import Foundation
 
 // READABLE typedef
-typealias sqlite3 = COpaquePointer
+typealias sqlite3 = OpaquePointer
 typealias CCharHandle = UnsafeMutablePointer<UnsafeMutablePointer<CChar>>
 typealias CCharPointer = UnsafeMutablePointer<CChar>
-typealias CVoidPointer = UnsafeMutablePointer<Void>
+typealias CVoidPointer = UnsafeMutableRawPointer
 
 // SETUP DATABASE BEGINS ... exec non-callback commands open, create table & insert data
 var argv = [

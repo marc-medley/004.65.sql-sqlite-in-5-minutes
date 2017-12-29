@@ -8,18 +8,19 @@
 
 import Foundation
 
+/// callback function pointer needs to be a global level function
 func callback(
-    resultVoidPointer: CVoidPointer, // void *NotUsed 
+    _ resultVoidPointer: CVoidPointer, // void *NotUsed 
     columnCount: CInt,               // int argc
     values: CCharHandle,             // char **argv     
     columns: CCharHandle             // char **azColName
     ) -> CInt {
     for  i in 0 ..< Int(columnCount) {
-        guard let value = String.fromCString(values[i]) else {
+        guard let value = String(validatingUTF8: values[i]) else {
             print("No value")
             continue
         }
-        guard let column = String.fromCString(columns[i]) else {
+        guard let column = String(validatingUTF8: columns[i]) else {
             print("No column")
             continue
         }
@@ -33,9 +34,9 @@ func callback(
  - parameter argv: C-style argument values array
  - returns: integer result code. 0 for success.
  */
-func sqlQueryCallbackBasic(argc argc: Int, argv: [String]) -> Int {
-    var db: sqlite3 = nil 
-    var zErrMsg:CCharPointer = nil
+func sqlQueryCallbackBasic(argc: Int, argv: [String]) -> Int {
+    var db: sqlite3? = nil 
+    var zErrMsg:CCharPointer? = nil
     var rc: Int32 = 0 // result code
     
     if argc != 3 {
@@ -45,14 +46,14 @@ func sqlQueryCallbackBasic(argc argc: Int, argv: [String]) -> Int {
     
     rc = sqlite3_open(argv[1], &db)
     if  rc != 0 {
-        print("ERROR: sqlite3_open " + String.fromCString(sqlite3_errmsg(db))! ?? "" )
+        print("ERROR: sqlite3_open " + String(cString: sqlite3_errmsg(db)) ?? "" )
         sqlite3_close(db)
         return 1
     }
     
     rc = sqlite3_exec(db, argv[2], callback, nil, &zErrMsg)
     if rc != SQLITE_OK {
-        print("ERROR: sqlite3_exec " + String.fromCString(zErrMsg)! ?? "")
+        print("ERROR: sqlite3_exec " + String(cString: zErrMsg!) ?? "")
         sqlite3_free(zErrMsg)
     }
     

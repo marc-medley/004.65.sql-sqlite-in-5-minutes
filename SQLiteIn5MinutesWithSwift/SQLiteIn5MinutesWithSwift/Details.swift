@@ -13,12 +13,12 @@ import Foundation
  - Note: Uses `sqlite3_prepare()`, `sqlite3_step()`, `sqlite3_column()`, and `sqlite3_finalize() instead of the `sqlite3_exec` convenience wrapper.
  
  */
-func sqlQueryDetails(path path: String, sql: String) {
-    var db: COpaquePointer = nil
-    var statement: COpaquePointer = nil // statement byte code
+func sqlQueryDetails(path: String, sql: String) {
+    var db: OpaquePointer? = nil
+    var statement: OpaquePointer? = nil // statement byte code
     
     // Open Database
-    if let cFileName = path.cStringUsingEncoding(NSUTF8StringEncoding) {
+    if let cFileName = path.cString(using: String.Encoding.utf8) {
         let openMode: Int32 = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE
         let statusOpen = sqlite3_open_v2(
             cFileName, // filename: UnsafePointer<CChar> 
@@ -42,7 +42,7 @@ func sqlQueryDetails(path path: String, sql: String) {
         nil         // const char **pzTail  : OUT: unused zSql pointer
     ) 
     if statusPrepare != SQLITE_OK {
-        let errmsg = String.fromCString(sqlite3_errmsg(db))
+        let errmsg = String(cString: sqlite3_errmsg(db))
         print("error preparing compiled statement: \(errmsg)")
         return
     }
@@ -56,7 +56,7 @@ func sqlQueryDetails(path path: String, sql: String) {
         print("-- ROW --")
         for i in 0 ..< sqlite3_column_count(statement) { 
             let cp = sqlite3_column_name(statement, i)
-            let columnName = String.fromCString(cp)!
+            let columnName = String(cString: cp!)
 
             switch sqlite3_column_type(statement, i) {
             case SQLITE_BLOB:
@@ -73,8 +73,8 @@ func sqlQueryDetails(path path: String, sql: String) {
             case SQLITE_TEXT: // SQLITE3_TEXT
                 let v = sqlite3_column_text(statement, i)
                 if v != nil {
-                    let s = String.fromCString(CCharPointer(v))
-                    print("SQLITE_TEXT:    \(columnName)=\(s!)")
+                    let s = String(cString: CCharPointer(v!))
+                    print("SQLITE_TEXT:    \(columnName)=\(s)")
                 } 
                 else {
                     print("SQLITE_TEXT: not convertable")
@@ -89,7 +89,7 @@ func sqlQueryDetails(path path: String, sql: String) {
         statusStep = sqlite3_step(statement)
     }
     if statusStep != SQLITE_DONE {
-        let errmsg = String.fromCString(sqlite3_errmsg(db))
+        let errmsg = String(cString: sqlite3_errmsg(db))
         print("failure inserting foo: \(errmsg)")
     }
     
@@ -97,7 +97,7 @@ func sqlQueryDetails(path path: String, sql: String) {
     
     // D. Deallocate. Release statement object.
     if sqlite3_finalize(statement) != SQLITE_OK {
-        let errmsg = String.fromCString(sqlite3_errmsg(db))
+        let errmsg = String(cString: sqlite3_errmsg(db))
         print("error finalizing prepared statement: \(errmsg)")
     }
     

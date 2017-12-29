@@ -21,21 +21,21 @@ class Result {
     init() { self.rows = [] }
 }
 
-func sqlQueryClosureWithResults(path path: String, sql: String) -> [Result.Row] {
-    var db: sqlite3 = nil 
-    var errorMessage: CCharPointer = nil
+func sqlQueryClosureWithResults(path: String, sql: String) -> [Result.Row] {
+    var db: sqlite3? = nil 
+    var errorMessage: CCharPointer? = nil
     var resultcode: Int32 = 0
         
     resultcode = sqlite3_open(path, &db)
     if  resultcode != 0 {
-        print("ERROR: sqlite3_open " + String.fromCString(sqlite3_errmsg(db))! ?? "" )
+        print("ERROR: sqlite3_open " + String(cString: sqlite3_errmsg(db)) ?? "" )
         sqlite3_close(db)
         return []
     }
         
-    let resultPointer = UnsafeMutablePointer<Result>.alloc(1)
+    let resultPointer = UnsafeMutablePointer<Result>.allocate(capacity: 1)
     var result = Result()
-    resultPointer.initializeFrom(&result, count: 1)
+    resultPointer.initialize(from: &result, count: 1)
     
     resultcode = sqlite3_exec(
         db,  // database 
@@ -43,16 +43,16 @@ func sqlQueryClosureWithResults(path path: String, sql: String) -> [Result.Row] 
         {    // callback: non-capturing closure
             resultVoidPointer, columnCount, values, columns in
             let resultPointer = UnsafeMutablePointer<Result>(resultVoidPointer)
-            let result = resultPointer.memory
+            let result = resultPointer.pointee
             
             let row = Result.Row()
             for i in 0 ..< Int(columnCount) {
-                guard let value = String.fromCString(values[i]) else {
+                guard let value = String(validatingUTF8: values[i]) else {
                     print("No value")
                     continue
                 }
                 
-                guard let column = String.fromCString(columns[i]) else {
+                guard let column = String(validatingUTF8: columns[i]) else {
                     print("No column")
                     continue
                 }
@@ -68,7 +68,7 @@ func sqlQueryClosureWithResults(path path: String, sql: String) -> [Result.Row] 
     )
     
     if resultcode != SQLITE_OK {
-        let errorMsg = String.fromCString(errorMessage)! ?? ""
+        let errorMsg = String(cString: errorMessage!) ?? ""
         print("ERROR: sqlite3_exec \(errorMsg)")
         sqlite3_free(errorMessage)
     }

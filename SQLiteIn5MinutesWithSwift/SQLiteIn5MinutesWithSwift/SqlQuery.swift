@@ -12,15 +12,15 @@ import Foundation
 //#define SQLITE_STATIC      ((sqlite3_destructor_type)0)
 //#define SQLITE_TRANSIENT   ((sqlite3_destructor_type)-1)                 
 // SQLITE_STATIC static, unmanaged value. not freed by SQLite.
-internal let SQLITE_STATIC = unsafeBitCast(0, sqlite3_destructor_type.self)
+internal let SQLITE_STATIC = unsafeBitCast(0, to: sqlite3_destructor_type.self)
 // SQLITE_TRANSIENT volatile value. SQLite makes private copy before returning.
-internal let SQLITE_TRANSIENT = unsafeBitCast(-1, sqlite3_destructor_type.self)
+internal let SQLITE_TRANSIENT = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
 
 class SqlQuery {
-    var db: COpaquePointer = nil
-    var statement: COpaquePointer = nil // statement byte code
+    var db: OpaquePointer? = nil
+    var statement: OpaquePointer? = nil // statement byte code
     
-    init(db: COpaquePointer) {
+    init(db: OpaquePointer) {
         self.db = db
     }
     
@@ -32,7 +32,7 @@ class SqlQuery {
         // release to statement object to avoid memory leaks
         // sqlite3_finalize(sqlite3_stmt *pStmt);
         if sqlite3_finalize(statement) != SQLITE_OK {
-            let errmsg = String.fromCString(sqlite3_errmsg(db))
+            let errmsg = String(cString: sqlite3_errmsg(db))
             print("error finalizing prepared statement: \(errmsg)")
         }
         if db != nil {
@@ -46,8 +46,8 @@ class SqlQuery {
     /**
      - parameter path: /path/to/database.sqlitedb
      */
-    func databaseOpen(path path: String) -> Int32 {
-        if let cFileName = path.cStringUsingEncoding(NSUTF8StringEncoding) {
+    func databaseOpen(path: String) -> Int32 {
+        if let cFileName = path.cString(using: String.Encoding.utf8) {
             let openMode: Int32 = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE
             let statusOpen = sqlite3_open_v2(
                 cFileName, // filename: UnsafePointer<CChar> 
@@ -72,8 +72,8 @@ class SqlQuery {
         }
     }
     
-    func statementPrepare(sql: String) -> Int32 {
-        if let cSql = sql.cStringUsingEncoding(NSUTF8StringEncoding) {
+    func statementPrepare(_ sql: String) -> Int32 {
+        if let cSql = sql.cString(using: String.Encoding.utf8) {
             let statusPrepare = sqlite3_prepare_v2(
                 db,         // sqlite3 *db          : Database handle
                 cSql,       // const char *zSql     : SQL statement, UTF-8 encoded
@@ -82,7 +82,7 @@ class SqlQuery {
                 nil         // const char **pzTail  : OUT: unused zSql pointer
             ) 
             if statusPrepare != SQLITE_OK {
-                let errmsg = String.fromCString(sqlite3_errmsg(db))
+                let errmsg = String(cString: sqlite3_errmsg(db))
                 print("error preparing compiled statement: \(errmsg)")
             }
             return statusPrepare
@@ -94,17 +94,17 @@ class SqlQuery {
         sqlite3_reset(statement)
     }
     
-    func statementBind(paramIndex paramIndex: Int32, paramValue: String) -> Int32 {
-        if let cParamValue = paramValue.cStringUsingEncoding(NSUTF8StringEncoding) {
+    func statementBind(paramIndex: Int32, paramValue: String) -> Int32 {
+        if let cParamValue = paramValue.cString(using: String.Encoding.utf8) {
             let statusBind = sqlite3_bind_text(
                 statement,        // sqlite3_stmt*  : statement from sqlite3_prepare_v2()
-                paramIndex,       // int            : parameter index to be set. starts @ 1
+                paramIndex,       // int            : parameter index to set. starts @ 1
                 cParamValue,      // const char*    : parameter value to bind
-                -1,               // int            : -1 for NUL terminated text | value byte count
+                -1,               // int            : -1 is NUL terminated | value byte count
                 SQLITE_TRANSIENT  // void(*)(void*) : SQLITE_TRANSIENT: SQLite makes private copy
             )
             if statusBind != SQLITE_OK {
-                let errmsg = String.fromCString(sqlite3_errmsg(db))
+                let errmsg = String(cString: sqlite3_errmsg(db))
                 print("failure binding \(paramValue): \(errmsg)")
             }
             return statusBind
@@ -119,7 +119,7 @@ class SqlQuery {
             print("-- ROW --")
             for i in 0 ..< sqlite3_column_count(statement) { 
                 let cp = sqlite3_column_name(statement, i)
-                let columnName = String.fromCString(cp)!
+                let columnName = String(cString: cp!)
                 
                 switch sqlite3_column_type(statement, i) {
                 case SQLITE_BLOB:
@@ -136,8 +136,8 @@ class SqlQuery {
                 case SQLITE_TEXT: // SQLITE3_TEXT
                     let v = sqlite3_column_text(statement, i)
                     if v != nil {
-                        let s = String.fromCString(CCharPointer(v))
-                        print("SQLITE_TEXT:    \(columnName)=\(s!)")
+                        let s = String(cString: CCharPointer(v!))
+                        print("SQLITE_TEXT:    \(columnName)=\(s)")
                     } 
                     else {
                         print("SQLITE_TEXT: not convertable")
@@ -152,7 +152,7 @@ class SqlQuery {
             statusStep = sqlite3_step(statement)
         }
         if statusStep != SQLITE_DONE {
-            let errmsg = String.fromCString(sqlite3_errmsg(db))
+            let errmsg = String(cString: sqlite3_errmsg(db))
             print("failure inserting foo: \(errmsg)")
         }
     }

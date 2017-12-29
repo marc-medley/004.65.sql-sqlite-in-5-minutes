@@ -15,9 +15,9 @@ import Foundation
  - parameter argv: C-style argument values array
  - returns: integer result code. 0 for success.
  */
-func sqlCommand(argc argc: Int, argv: [String]) -> Int {
-    var db: sqlite3 = nil // sqlite3 *db;
-    var zErrMsg:CCharPointer = nil
+func sqlCommand(argc: Int, argv: [String]) -> Int {
+    var db: sqlite3? = nil // sqlite3 *db;
+    var zErrMsg:CCharPointer? = nil
     var rc: Int32 = 0 // result code
     
     if argc != 3 {
@@ -27,14 +27,14 @@ func sqlCommand(argc argc: Int, argv: [String]) -> Int {
     
     rc = sqlite3_open(argv[1], &db)
     if  rc != 0 {
-        print("ERROR: sqlite3_open " + String.fromCString(sqlite3_errmsg(db))! ?? "" )
+        print("ERROR: sqlite3_open " + String(cString: sqlite3_errmsg(db)) ?? "" )
         sqlite3_close(db)
         return 1
     }
 
     rc = sqlite3_exec(db, argv[2], nil, nil, &zErrMsg)
     if rc != SQLITE_OK {
-        print("ERROR: sqlite3_exec " + String.fromCString(zErrMsg)! ?? "")
+        print("ERROR: sqlite3_exec " + String(cString: zErrMsg!) ?? "")
         sqlite3_free(zErrMsg)
     }
     
@@ -49,21 +49,21 @@ func sqlCommand(argc argc: Int, argv: [String]) -> Int {
  - parameter sql: non-query SQL statement
  - returns: integer result code. 0 for success
  */
-func sqlCommand(path path: String, sql: String) -> Int {
-    var db: sqlite3 = nil // sqlite3 *db;
-    var zErrMsg:CCharPointer = nil
+func sqlCommand(path: String, sql: String) -> Int {
+    var db: sqlite3? = nil // sqlite3 *db;
+    var zErrMsg:CCharPointer? = nil
     var rc: Int32 = 0 // result code
         
     rc = sqlite3_open(path, &db)
     if  rc != 0 {
-        print("ERROR: sqlite3_open " + String.fromCString(sqlite3_errmsg(db))! ?? "" )
+        print("ERROR: sqlite3_open " + String(cString: sqlite3_errmsg(db)) ?? "" )
         sqlite3_close(db)
         return 1
     }
     
     rc = sqlite3_exec(db, sql, nil, nil, &zErrMsg)
     if rc != SQLITE_OK {
-        print("ERROR: sqlite3_exec " + String.fromCString(zErrMsg)! ?? "")
+        print("ERROR: sqlite3_exec " + String(cString: zErrMsg!) ?? "")
         sqlite3_free(zErrMsg)
     }
     
