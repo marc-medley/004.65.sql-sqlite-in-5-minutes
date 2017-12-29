@@ -20,9 +20,10 @@ func sqlQueryDetails(path: String, sql: String) {
     // Open Database
     if let cFileName = path.cString(using: String.Encoding.utf8) {
         let openMode: Int32 = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE
+        // sqlite3_open_v2(<#T##filename: UnsafePointer<Int8>!##UnsafePointer<Int8>!#>, <#T##ppDb: UnsafeMutablePointer<OpaquePointer?>!##UnsafeMutablePointer<OpaquePointer?>!#>, <#T##flags: Int32##Int32#>, <#T##zVfs: UnsafePointer<Int8>!##UnsafePointer<Int8>!#>) // :WIP:
         let statusOpen = sqlite3_open_v2(
             cFileName, // filename: UnsafePointer<CChar> 
-            &db,       // ppDb: UnsafeMutablePointer<COpaquePointer> aka handle
+            &db,       // ppDb: UnsafeMutablePointer<OpaquePointer> aka handle
             openMode,  // flags: Int32 
             nil        // zVfs VFS module name: UnsafePointer<Int8>
         )
@@ -71,9 +72,8 @@ func sqlQueryDetails(path: String, sql: String) {
             case SQLITE_NULL:  
                 print("SQLITE_NULL:    \(columnName)")
             case SQLITE_TEXT: // SQLITE3_TEXT
-                let v = sqlite3_column_text(statement, i)
-                if v != nil {
-                    let s = String(cString: CCharPointer(v!))
+                if let v = sqlite3_column_text(statement, i) {
+                    let s = String(cString: v)
                     print("SQLITE_TEXT:    \(columnName)=\(s)")
                 } 
                 else {

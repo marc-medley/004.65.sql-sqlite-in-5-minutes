@@ -10,21 +10,32 @@ import Foundation
 
 /// callback function pointer needs to be a global level function
 func callback(
-    _ resultVoidPointer: CVoidPointer, // void *NotUsed 
-    columnCount: CInt,               // int argc
-    values: CCharHandle,             // char **argv     
-    columns: CCharHandle             // char **azColName
-    ) -> CInt {
-    for  i in 0 ..< Int(columnCount) {
-        guard let value = String(validatingUTF8: values[i]) else {
-            print("No value")
-            continue
+    /// void *notUsed,    CVoidPointer
+    _ resultVoidPointer: UnsafeMutableRawPointer?,  
+    /// int argc,         CInt
+    columnCount: CInt,
+    /// char **argv,      CCharHandle
+    values: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>?,
+    /// char **azColName, CCharHandle
+    columns: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>? 
+    ) -> Int32 { // -> CInt
+    
+    if let columns = columns, let values = values {
+        for  i in 0 ..< Int(columnCount) {
+            guard let value = values[i],
+                let valueStr = String(validatingUTF8: value) else {
+                    print("No value")
+                    continue
+            }
+            
+            guard let column = columns[i],
+                let columnStr = String(validatingUTF8: column) else {
+                    print("No column")
+                    continue
+            }
+            
+            print("\(columnStr) = \(valueStr)")
         }
-        guard let column = String(validatingUTF8: columns[i]) else {
-            print("No column")
-            continue
-        }
-        print("\(column) = \(value)")
     }
     return 0 // 0 == status ok
 }
@@ -46,14 +57,14 @@ func sqlQueryCallbackBasic(argc: Int, argv: [String]) -> Int {
     
     rc = sqlite3_open(argv[1], &db)
     if  rc != 0 {
-        print("ERROR: sqlite3_open " + String(cString: sqlite3_errmsg(db)) ?? "" )
+        print("ERROR: sqlite3_open " + String(cString: sqlite3_errmsg(db)) )
         sqlite3_close(db)
         return 1
     }
-    
+
     rc = sqlite3_exec(db, argv[2], callback, nil, &zErrMsg)
     if rc != SQLITE_OK {
-        print("ERROR: sqlite3_exec " + String(cString: zErrMsg!) ?? "")
+        print("ERROR: sqlite3_exec " + String(cString: zErrMsg!))
         sqlite3_free(zErrMsg)
     }
     

@@ -28,47 +28,59 @@ func sqlQueryClosureWithResults(path: String, sql: String) -> [Result.Row] {
         
     resultcode = sqlite3_open(path, &db)
     if  resultcode != 0 {
-        print("ERROR: sqlite3_open " + String(cString: sqlite3_errmsg(db)) ?? "" )
+        print("ERROR: sqlite3_open " + String(cString: sqlite3_errmsg(db)) )
         sqlite3_close(db)
         return []
     }
         
     let resultPointer = UnsafeMutablePointer<Result>.allocate(capacity: 1)
     var result = Result()
-    resultPointer.initialize(from: &result, count: 1)
-    
+    resultPointer.initialize(from: &result, count: 1) // :!!!:???: .deallocate somewhere?
+
     resultcode = sqlite3_exec(
-        db,  // database 
-        sql, // statement
-        {    // callback: non-capturing closure
-            resultVoidPointer, columnCount, values, columns in
-            let resultPointer = UnsafeMutablePointer<Result>(resultVoidPointer)
+        db,  // opened database: sqlite3* … OpaquePointer
+        sql, // SQL statement: const char *sql … UnsafePointer<Int8> … UnsafePointer<CChar>
+        {    // callback, non-capturing closure: int (*callback)(void*,int,char**,char**)
+            param,        // void* … UnsafeMutableRawPointer?
+            columnCount,  // int
+            values,       // char** … UnsafeMutablePointer< UnsafeMutablePointer<Int8>? >?
+            columns       // char** … UnsafeMutablePointer< UnsafeMutablePointer<Int8>? >?
+            in
+            
+            guard let p: UnsafeMutableRawPointer = param else {
+                    return -1
+            }
+            let resultPointer = p.bindMemory(to: Result.self, capacity: 1)
             let result = resultPointer.pointee
             
             let row = Result.Row()
-            for i in 0 ..< Int(columnCount) {
-                guard let value = String(validatingUTF8: values[i]) else {
-                    print("No value")
-                    continue
+            if let columns = columns, let values = values {
+                for i in 0 ..< Int(columnCount) {
+                    guard let value = values[i],
+                    let valueStr = String(validatingUTF8: value) else {
+                        print("No value")
+                        continue
+                    }
+                    
+                    guard let column = columns[i],
+                    let columnStr = String(validatingUTF8: column) else {
+                        print("No column")
+                        continue
+                    }
+                    
+                    row.data[columnStr] = valueStr
                 }
-                
-                guard let column = String(validatingUTF8: columns[i]) else {
-                    print("No column")
-                    continue
-                }
-                
-                row.data[column] = value
             }
             
             result.rows.append(row)
             return 0
         }, 
-        resultPointer, // 
-        &errorMessage
+        resultPointer, // param, 1st argument to callback: void* … UnsafeMutableRawPointer? 
+        &errorMessage  // Error msg written here:   char **errmsg 
     )
     
     if resultcode != SQLITE_OK {
-        let errorMsg = String(cString: errorMessage!) ?? ""
+        let errorMsg = String(cString: errorMessage!)
         print("ERROR: sqlite3_exec \(errorMsg)")
         sqlite3_free(errorMessage)
     }

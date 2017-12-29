@@ -27,14 +27,14 @@ func sqlCommand(argc: Int, argv: [String]) -> Int {
     
     rc = sqlite3_open(argv[1], &db)
     if  rc != 0 {
-        print("ERROR: sqlite3_open " + String(cString: sqlite3_errmsg(db)) ?? "" )
+        print("ERROR: sqlite3_open " + String(cString: sqlite3_errmsg(db)) )
         sqlite3_close(db)
         return 1
     }
 
     rc = sqlite3_exec(db, argv[2], nil, nil, &zErrMsg)
     if rc != SQLITE_OK {
-        print("ERROR: sqlite3_exec " + String(cString: zErrMsg!) ?? "")
+        print("ERROR: sqlite3_exec " + String(cString: zErrMsg!))
         sqlite3_free(zErrMsg)
     }
     
@@ -56,14 +56,14 @@ func sqlCommand(path: String, sql: String) -> Int {
         
     rc = sqlite3_open(path, &db)
     if  rc != 0 {
-        print("ERROR: sqlite3_open " + String(cString: sqlite3_errmsg(db)) ?? "" )
+        print("ERROR: sqlite3_open " + String(cString: sqlite3_errmsg(db)) )
         sqlite3_close(db)
         return 1
     }
     
     rc = sqlite3_exec(db, sql, nil, nil, &zErrMsg)
     if rc != SQLITE_OK {
-        print("ERROR: sqlite3_exec " + String(cString: zErrMsg!) ?? "")
+        print("ERROR: sqlite3_exec " + String(cString: zErrMsg!) )
         sqlite3_free(zErrMsg)
     }
     

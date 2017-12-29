@@ -2,6 +2,7 @@
 
 Based on ["SQLite in 5 minutes or less"](https://sqlite.org/quickstart.html) at [sqlite.org](https://sqlite.org/).  This implementation is for Swift 2.2.
 
+Updated for Swift 4 and Xcode 9
 
 ## Xcode Project Setup
 
@@ -39,7 +40,7 @@ Each file contains a varied approach for accessing an SQLite database using Swif
 **`main.swift`** Provides `typealias` used by each example.
 
 ~~~swift
-typealias sqlite3 = COpaquePointer
+typealias sqlite3 = OpaquePointer // :SWIFT2: COpaquePointer
 typealias CCharHandle = UnsafeMutablePointer<UnsafeMutablePointer<CChar>>
 typealias CCharPointer = UnsafeMutablePointer<CChar>
 typealias CVoidPointer = UnsafeMutablePointer<Void>

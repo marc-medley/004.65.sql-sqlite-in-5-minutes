@@ -25,37 +25,47 @@ func sqlQueryClosureBasic(argc: Int, argv: [String]) -> Int {
     
     rc = sqlite3_open(argv[1], &db)
     if  rc != 0 {
-        print("ERROR: sqlite3_open " + String(cString: sqlite3_errmsg(db)) ?? "" )
+        print("ERROR: sqlite3_open " + String(cString: sqlite3_errmsg(db)) )
         sqlite3_close(db)
         return 1
     }
     
     rc = sqlite3_exec(
-        db,      // database 
-        argv[2], // statement
-        {        // callback: non-capturing closure
-            resultVoidPointer, columnCount, values, names in
+        db,      // opened database: sqlite3* … OpaquePointer
+        argv[2], // SQL statement: const char *sql … UnsafePointer<Int8> … UnsafePointer<CChar>
+        {        // callback, non-capturing closure: int (*callback)(void*,int,char**,char**)
+            resultVoidPointer, // void* 
+            columnCount,       // int
+            values,            // char** … UnsafeMutablePointer< UnsafeMutablePointer<Int8>? >?
+            names              // char** … UnsafeMutablePointer< UnsafeMutablePointer<Int8>? >?
+            in
+            
             // resultVoidPointer is unused
-            for i in 0 ..< Int(columnCount) {
-                guard let value = String(validatingUTF8: values[i]) else {
-                    print("No column value")
-                    continue
+            
+            if let names = names, let values = values {
+                for i in 0 ..< Int(columnCount) {
+                    guard let columnValue = values[i],
+                        let columnValueStr = String(validatingUTF8: columnValue) else {
+                            print("No UTF8 column value")
+                            continue
+                    }
+                    
+                    guard let columnName = names[i],
+                    let columnNameStr = String(validatingUTF8: columnName) else {
+                        print("No column name")
+                        continue
+                    }
+                    print("\(columnNameStr) = \(columnValueStr)")
                 }
-                
-                guard let column = String(validatingUTF8: names[i]) else {
-                    print("No column name")
-                    continue
-                }
-                print("\(column) = \(value)")
             }
-            return 0
-        }, 
-        nil, 
-        &zErrMsg
+            return 0 // -> Int32
+    }, 
+        nil,       // param, 1st argument to callback: void* … UnsafeMutableRawPointer?
+        &zErrMsg   // Error msg written here:   char **errmsg 
     )
     
     if rc != SQLITE_OK {
-        let errorMsg = String(cString: zErrMsg!) ?? ""
+        let errorMsg = String(cString: zErrMsg!)
         print("ERROR: sqlite3_exec \(errorMsg)")
         sqlite3_free(zErrMsg)
     }

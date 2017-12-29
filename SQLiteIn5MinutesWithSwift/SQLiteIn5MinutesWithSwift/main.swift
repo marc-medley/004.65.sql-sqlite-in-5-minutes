@@ -20,28 +20,28 @@ var argv = [
     "example.sqlitedb", 
     "DROP TABLE IF EXISTS people;"
 ]
-sqlCommand(argc: argv.count, argv: argv)
+_ = sqlCommand(argc: argv.count, argv: argv)
 
 argv = [
     "sqlCommand", 
     "example.sqlitedb", 
     "CREATE TABLE people (name TEXT, date_of_birth DATETIME, tickets INTEGER, balance REAL);"
 ]
-sqlCommand(argc: argv.count, argv: argv)
+_ = sqlCommand(argc: argv.count, argv: argv)
 
 argv = [
     "sqlCommand", 
     "example.sqlitedb", 
     "INSERT INTO people VALUES ('Jay', '1977-01-01', 0, 0);"
 ]
-sqlCommand(argc: argv.count, argv: argv)
+_ = sqlCommand(argc: argv.count, argv: argv)
 
 argv = ["sqlCommand", 
         "example.sqlitedb", 
         "INSERT INTO people VALUES ('Kay', '1988-05-09', 1, 10.00);"]
-sqlCommand(argc: argv.count, argv: argv)
+_ = sqlCommand(argc: argv.count, argv: argv)
 
-sqlCommand(
+_ = sqlCommand(
     path: "example.sqlitedb", 
     sql: "INSERT INTO people VALUES ('Zay', '2000-01-01', 2, 55.23);"
 )
@@ -52,11 +52,11 @@ print(":: Query Database, Basic Callback ::")
 argv = ["sqlQueryCallbackBasic", 
         "example.sqlitedb", 
         "SELECT * FROM people;"]
-sqlQueryCallbackBasic(argc: argv.count, argv: argv)
+_ = sqlQueryCallbackBasic(argc: argv.count, argv: argv)
 
 // EXAMPLE ClosureBasic.swift: Basic Closure
 print("\n:: Query Database, Basic Closure ::")
-sqlQueryClosureBasic(argc: argv.count, argv: argv)
+_ = sqlQueryClosureBasic(argc: argv.count, argv: argv)
 
 // EXAMPLE: ClosureResults.swift: Closure with 
 print("\n:: Query Database, Closure with Results Array ::")
@@ -79,8 +79,8 @@ sqlQueryDetails(
 // EXAMPLE: SqlQuery.swift: Closure with prepare, step, column, and finalize
 print("\n:: SqlQuery.swift. Prepare, bind, step, column, and finalize ::")
 let sqlQuery = SqlQuery(path: "example.sqlitedb")
-sqlQuery.statementPrepare("SELECT * FROM people WHERE name = :1;")
-sqlQuery.statementBind(paramIndex: 1, paramValue: "Kay")
+_ = sqlQuery.statementPrepare("SELECT * FROM people WHERE name = :1;")
+_ = sqlQuery.statementBind(paramIndex: 1, paramValue: "Kay")
 sqlQuery.statementExecute()
 sqlQuery.databaseClose()
 
