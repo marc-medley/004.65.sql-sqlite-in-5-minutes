@@ -49,10 +49,9 @@ class SqlQuery {
     func databaseOpen(path: String) -> Int32 {
         if let cFileName = path.cString(using: String.Encoding.utf8) {
             let openMode: Int32 = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE
-            // sqlite3_open_v2(<#T##filename: UnsafePointer<Int8>!##UnsafePointer<Int8>!#>, <#T##ppDb: UnsafeMutablePointer<OpaquePointer?>!##UnsafeMutablePointer<OpaquePointer?>!#>, <#T##flags: Int32##Int32#>, <#T##zVfs: UnsafePointer<Int8>!##UnsafePointer<Int8>!#>) // :WIP:
             let statusOpen = sqlite3_open_v2(
-                cFileName, // filename: UnsafePointer<CChar> 
-                &db,       // ppDb: UnsafeMutablePointer<OpaquePointer> aka handle
+                cFileName, // filename: UnsafePointer<CChar> … UnsafePointer<Int8>
+                &db,       // ppDb: UnsafeMutablePointer<OpaquePointer?> aka handle
                 openMode,  // flags: Int32 
                 nil        // zVfs VFS module name: UnsafePointer<Int8>
             )
