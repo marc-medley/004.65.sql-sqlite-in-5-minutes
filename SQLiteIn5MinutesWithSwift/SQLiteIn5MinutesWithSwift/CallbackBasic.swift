@@ -15,9 +15,9 @@ func callback(
     /// int argc,         CInt
     columnCount: CInt,
     /// char **argv,      CCharHandle
-    values: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>?,
+    values: UnsafeMutablePointer<UnsafeMutablePointer<CChar>?>?,
     /// char **azColName, CCharHandle
-    columns: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>? 
+    columns: UnsafeMutablePointer<UnsafeMutablePointer<CChar>?>? 
     ) -> Int32 { // -> CInt
     
     if let columns = columns, let values = values {

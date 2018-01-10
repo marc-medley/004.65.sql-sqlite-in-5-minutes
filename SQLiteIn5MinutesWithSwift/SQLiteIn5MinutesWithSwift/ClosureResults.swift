@@ -39,12 +39,12 @@ func sqlQueryClosureWithResults(path: String, sql: String) -> [Result.Row] {
 
     resultcode = sqlite3_exec(
         db,  // opened database: sqlite3* … OpaquePointer
-        sql, // SQL statement: const char *sql … UnsafePointer<Int8> … UnsafePointer<CChar>
+        sql, // SQL statement: const char *sql … UnsafePointer<CChar> … UnsafePointer<Int8> 
         {    // callback, non-capturing closure: int (*callback)(void*,int,char**,char**)
             param,        // void* … UnsafeMutableRawPointer?
             columnCount,  // int
-            values,       // char** … UnsafeMutablePointer< UnsafeMutablePointer<Int8>? >?
-            columns       // char** … UnsafeMutablePointer< UnsafeMutablePointer<Int8>? >?
+            values,       // char** … UnsafeMutablePointer< UnsafeMutablePointer<CChar>? >?
+            columns       // char** … UnsafeMutablePointer< UnsafeMutablePointer<CChar>? >?
             in
             
             guard let p: UnsafeMutableRawPointer = param else {

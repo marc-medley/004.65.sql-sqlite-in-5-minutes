@@ -32,12 +32,12 @@ func sqlQueryClosureBasic(argc: Int, argv: [String]) -> Int {
     
     rc = sqlite3_exec(
         db,      // opened database: sqlite3* … OpaquePointer
-        argv[2], // SQL statement: const char *sql … UnsafePointer<Int8> … UnsafePointer<CChar>
+        argv[2], // SQL statement: const char *sql … UnsafePointer<CChar> … UnsafePointer<Int8>
         {        // callback, non-capturing closure: int (*callback)(void*,int,char**,char**)
             resultVoidPointer, // void* 
             columnCount,       // int
-            values,            // char** … UnsafeMutablePointer< UnsafeMutablePointer<Int8>? >?
-            names              // char** … UnsafeMutablePointer< UnsafeMutablePointer<Int8>? >?
+            values,            // char** … UnsafeMutablePointer< UnsafeMutablePointer<CChar>? >?
+            names              // char** … UnsafeMutablePointer< UnsafeMutablePointer<CChar>? >?
             in
             
             // resultVoidPointer is unused

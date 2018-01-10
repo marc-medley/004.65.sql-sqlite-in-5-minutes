@@ -53,7 +53,7 @@ class SqlQuery {
                 cFileName, // filename: UnsafePointer<CChar> … UnsafePointer<Int8>
                 &db,       // ppDb: UnsafeMutablePointer<OpaquePointer?> aka handle
                 openMode,  // flags: Int32 
-                nil        // zVfs VFS module name: UnsafePointer<Int8>
+                nil        // zVfs VFS module name: UnsafePointer<CChar> … UnsafePointer<Int8>
             )
             if statusOpen != SQLITE_OK {
                 print("error opening database")
