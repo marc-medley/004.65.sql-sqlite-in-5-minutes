@@ -14,35 +14,38 @@ typealias CCharHandle = UnsafeMutablePointer<UnsafeMutablePointer<CChar>>
 typealias CCharPointer = UnsafeMutablePointer<CChar>
 typealias CVoidPointer = UnsafeMutableRawPointer
 
+//let filename = ":memory:"           // creates temporary database in memory
+let filename = "example.sqlitedb" // creates database with filename on disk
+
 // SETUP DATABASE BEGINS ... exec non-callback commands open, create table & insert data
 var argv = [
     "sqlCommand", 
-    "example.sqlitedb", 
+    filename, 
     "DROP TABLE IF EXISTS people;"
 ]
 _ = sqlCommand(argc: argv.count, argv: argv)
 
 argv = [
     "sqlCommand", 
-    "example.sqlitedb", 
+    filename, 
     "CREATE TABLE people (name TEXT, date_of_birth DATETIME, tickets INTEGER, balance REAL);"
 ]
 _ = sqlCommand(argc: argv.count, argv: argv)
 
 argv = [
     "sqlCommand", 
-    "example.sqlitedb", 
+    filename, 
     "INSERT INTO people VALUES ('Jay', '1977-01-01', 0, 0);"
 ]
 _ = sqlCommand(argc: argv.count, argv: argv)
 
 argv = ["sqlCommand", 
-        "example.sqlitedb", 
+        filename, 
         "INSERT INTO people VALUES ('Kay', '1988-05-09', 1, 10.00);"]
 _ = sqlCommand(argc: argv.count, argv: argv)
 
 _ = sqlCommand(
-    path: "example.sqlitedb", 
+    path: filename, 
     sql: "INSERT INTO people VALUES ('Zay', '2000-01-01', 2, 55.23);"
 )
 // SETUP DATABASE COMPLETE.
@@ -50,7 +53,7 @@ _ = sqlCommand(
 // EXAMPLE CallbackBasic.swift: Basic C-Style Callback
 print(":: Query Database, Basic Callback ::")
 argv = ["sqlQueryCallbackBasic", 
-        "example.sqlitedb", 
+        filename, 
         "SELECT * FROM people;"]
 _ = sqlQueryCallbackBasic(argc: argv.count, argv: argv)
 
@@ -61,7 +64,7 @@ _ = sqlQueryClosureBasic(argc: argv.count, argv: argv)
 // EXAMPLE: ClosureResults.swift: Closure with 
 print("\n:: Query Database, Closure with Results Array ::")
 let results = sqlQueryClosureWithResults(
-    path: "example.sqlitedb", 
+    path: filename, 
     sql: "SELECT * FROM people;"
 )
 print(":: Results Array ::")
@@ -72,13 +75,13 @@ for r in results {
 // EXAMPLE: Details.swift: Closure with prepare, step, column, and finalize
 print("\n:: Query Database. Details prepare, step, column, and finalize ::")
 sqlQueryDetails(
-    path: "example.sqlitedb", 
+    path: filename, 
     sql: "SELECT * FROM people;"
 )
 
 // EXAMPLE: SqlQuery.swift: Closure with prepare, step, column, and finalize
 print("\n:: SqlQuery.swift. Prepare, bind, step, column, and finalize ::")
-let sqlQuery = SqlQuery(path: "example.sqlitedb")
+let sqlQuery = SqlQuery(path: filename)
 _ = sqlQuery.statementPrepare("SELECT * FROM people WHERE name = :1;")
 _ = sqlQuery.statementBind(paramIndex: 1, paramValue: "Kay")
 sqlQuery.statementExecute()
