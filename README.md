@@ -9,7 +9,7 @@ Updated for Swift 4 and Xcode 9
 1. **New Swift Project.** Xcode > File > New > Project… > OS X Command Line Tool
 2. **Add Bridging Header.**
 
-    ~~~c
+    ``` c
     #ifndef Bridging_Header_h
     #define Bridging_Header_h
 
@@ -17,7 +17,7 @@ Updated for Swift 4 and Xcode 9
     #import <time.h>
 
     #endif /* Bridging_Header_h */
-    ~~~
+    ```
 
     ![](README_files/BridgeHeaderProjectSetting.png)
 
@@ -39,19 +39,19 @@ Each file contains a varied approach for accessing an SQLite database using Swif
 
 **`main.swift`** Provides `typealias` used by each example.
 
-~~~swift
+``` swift
 typealias sqlite3 = OpaquePointer // :SWIFT2: COpaquePointer
 typealias CCharHandle = UnsafeMutablePointer<UnsafeMutablePointer<CChar>>
 typealias CCharPointer = UnsafeMutablePointer<CChar>
 typealias CVoidPointer = UnsafeMutablePointer<Void>
-~~~
+```
 
 *Note: The Swift `callback` can be either a global, non-instance procedure `func` or a non-capturing literal closure `{}`.*
 
 
 **`CallbackBasic.swift` C Style Callback**  
 
-~~~swift
+``` swift
 func callback(
     resultVoidPointer: CVoidPointer, // void *NotUsed 
     columnCount: CInt,               // int argc
@@ -98,11 +98,11 @@ func sqlQueryCallbackBasic(argc: Int, argv: [String]) -> Int {
     sqlite3_close(db)
     return 0
 }
-~~~
+```
 
 **`ClosureBasic.swift` Swift Closure. C Style.**  
 
-~~~swift
+``` swift
 func sqlQueryClosureBasic(argc argc: Int, argv: [String]) -> Int {
     var db: sqlite3 = nil 
     var zErrMsg:CCharPointer = nil
@@ -153,12 +153,12 @@ func sqlQueryClosureBasic(argc argc: Int, argv: [String]) -> Int {
     sqlite3_close(db)
     return 0
 }
-~~~
+```
 
 
 **`closureResults.swift` Swift Closure. Returns Array\<Dictionary\>.**  
 
-~~~swift
+``` swift
 class Result {
     class Row {
         var data: [String: String]
@@ -224,6 +224,6 @@ func sqlQueryClosureWithResults(path path: String, sql: String) -> [Result.Row] 
     sqlite3_close(db)
     return result.rows
 }
-~~~
+```
 
 May your "5-minutes" be less than the "5-minutes" needed to prepare this project. Cheers. :-)
