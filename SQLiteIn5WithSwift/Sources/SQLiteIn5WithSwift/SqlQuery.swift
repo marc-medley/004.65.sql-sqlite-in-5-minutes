@@ -30,22 +30,7 @@ class SqlQuery {
     }
     
     deinit {
-        if db != nil {
-            // release to statement object to avoid memory leaks
-            // sqlite3_finalize destroy a prepared statement object
-            // sqlite3_finalize(sqlite3_stmt *pStmt);
-            if sqlite3_finalize(statement) != SQLITE_OK {
-                let errmsg = String(cString: sqlite3_errmsg(db))
-                print("error finalizing prepared statement: \(errmsg)")
-            }
-            
-            // Close Database
-            let result: Int32 = sqlite3_close_v2(db)
-            if result != SQLITE_OK {
-                print(":ERROR: SqlQuery `deinit` sqlite3_close result: \(result)")
-
-            }
-        }
+        databaseClose()
     }
     
     /// - parameter path: /path/to/database.sqlitedb
