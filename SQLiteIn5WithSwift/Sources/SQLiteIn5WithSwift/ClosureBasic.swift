@@ -1,18 +1,17 @@
 //
 //  ClosureBasic.swift
-//  SQLiteIn5MinutesWithSwift
+//  SQLiteIn5WithSwift
 //
 //  Created by marc on 2016.06.04.
 //  Copyright © 2016 --marc. All rights reserved.
 //
 
 import Foundation
+import SQLite3
 
-/**
- - parameter argc: C-style argument count
- - parameter argv: C-style argument values array
- - returns: integer result code. 0 for success.
- */
+/// - parameter argc: C-style argument count
+/// - parameter argv: C-style argument values array
+/// - returns: integer result code. 0 for success.
 func sqlQueryClosureBasic(argc: Int, argv: [String]) -> Int {
     var db: sqlite3? = nil 
     var zErrMsg:CCharPointer? = nil

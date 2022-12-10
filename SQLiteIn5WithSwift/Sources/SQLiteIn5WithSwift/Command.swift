@@ -7,14 +7,13 @@
 //
 
 import Foundation
+import SQLite3
 
-/**
- - note: Use for SQL statement which does not return any query result.
- 
- - parameter argc: C-style argument count
- - parameter argv: C-style argument values array
- - returns: integer result code. 0 for success.
- */
+// - note: Use for SQL statement which does not return any query result.
+//
+// - parameter argc: C-style argument count
+// - parameter argv: C-style argument values array
+// - returns: integer result code. 0 for success.
 func sqlCommand(argc: Int, argv: [String]) -> Int {
     var db: sqlite3? = nil // sqlite3 *db;
     var zErrMsg:CCharPointer? = nil
@@ -42,13 +41,11 @@ func sqlCommand(argc: Int, argv: [String]) -> Int {
     return 0
 }
 
-/**
- - note: Use for SQL statement which does not return any query result.
- 
- - parameter path: /path/to/some/database.sqlitedb
- - parameter sql: non-query SQL statement
- - returns: integer result code. 0 for success
- */
+/// - note: Use for SQL statement which does not return any query result.
+/// 
+/// - parameter path: /path/to/some/database.sqlitedb
+/// - parameter sql: non-query SQL statement
+/// - returns: integer result code. 0 for success
 func sqlCommand(path: String, sql: String) -> Int {
     var db: sqlite3? = nil // sqlite3 *db;
     var zErrMsg:CCharPointer? = nil

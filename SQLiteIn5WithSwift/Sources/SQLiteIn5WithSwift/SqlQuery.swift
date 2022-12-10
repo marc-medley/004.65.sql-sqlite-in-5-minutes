@@ -1,12 +1,13 @@
 //
 //  SqlQuery.swift
-//  SQLiteIn5MinutesWithSwift
+//  SQLiteIn5WithSwift
 //
 //  Created by marc on 2016.06.05.
 //  Copyright © 2016 --marc. All rights reserved.
 //
 
 import Foundation
+import SQLite3
 
 // defines not currently imported to Swift from <sqlite3.h>
 //#define SQLITE_STATIC      ((sqlite3_destructor_type)0)
@@ -29,23 +30,25 @@ class SqlQuery {
     }
     
     deinit {
-        // release to statement object to avoid memory leaks
-        // sqlite3_finalize(sqlite3_stmt *pStmt);
-        if sqlite3_finalize(statement) != SQLITE_OK {
-            let errmsg = String(cString: sqlite3_errmsg(db))
-            print("error finalizing prepared statement: \(errmsg)")
-        }
         if db != nil {
+            // release to statement object to avoid memory leaks
+            // sqlite3_finalize destroy a prepared statement object
+            // sqlite3_finalize(sqlite3_stmt *pStmt);
+            if sqlite3_finalize(statement) != SQLITE_OK {
+                let errmsg = String(cString: sqlite3_errmsg(db))
+                print("error finalizing prepared statement: \(errmsg)")
+            }
+            
             // Close Database
-            if sqlite3_close_v2(db) != SQLITE_OK {
-                print("error closing database")
+            let result: Int32 = sqlite3_close_v2(db)
+            if result != SQLITE_OK {
+                print(":ERROR: SqlQuery `deinit` sqlite3_close result: \(result)")
+
             }
         }
     }
     
-    /**
-     - parameter path: /path/to/database.sqlitedb
-     */
+    /// - parameter path: /path/to/database.sqlitedb
     func databaseOpen(path: String) -> Int32 {
         if let cFileName = path.cString(using: String.Encoding.utf8) {
             let openMode: Int32 = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE
@@ -64,10 +67,21 @@ class SqlQuery {
     }
     
     func databaseClose() {
+        // release to statement object to avoid memory leaks
+        // sqlite3_finalize destroy a prepared statement object
+        // sqlite3_finalize(sqlite3_stmt *pStmt);
         if db != nil {
+            if sqlite3_finalize(statement) != SQLITE_OK {
+                let errmsg = String(cString: sqlite3_errmsg(db))
+                print("error finalizing prepared statement: \(errmsg)")
+            }
+
             // Close Database
-            if sqlite3_close_v2(db) != SQLITE_OK {
-                print("error closing database")
+            let result: Int32 = sqlite3_close_v2(db)
+            if result != SQLITE_OK {
+                print(":ERROR: databaseClose() result \(result)")
+            } else {
+                db = nil
             }
         }
     }
@@ -155,7 +169,5 @@ class SqlQuery {
             print("failure inserting foo: \(errmsg)")
         }
     }
-    
-    
     
 }

@@ -1,18 +1,15 @@
 //
 //  Details.swift
-//  SQLiteIn5MinutesWithSwift
+//  SQLiteIn5WithSwift
 //
 //  Created by marc on 2016.06.04.
 //  Copyright © 2016 --marc. All rights reserved.
 //
 
 import Foundation
+import SQLite3
 
-/**
- 
- - Note: Uses `sqlite3_prepare()`, `sqlite3_step()`, `sqlite3_column()`, and `sqlite3_finalize() instead of the `sqlite3_exec` convenience wrapper.
- 
- */
+/// - Note: Uses `sqlite3_prepare()`, `sqlite3_step()`, `sqlite3_column()`, and `sqlite3_finalize() instead of the `sqlite3_exec` convenience wrapper.
 func sqlQueryDetails(path: String, sql: String) {
     var db: OpaquePointer? = nil
     var statement: OpaquePointer? = nil // statement byte code
@@ -101,8 +98,9 @@ func sqlQueryDetails(path: String, sql: String) {
     }
     
     // Close Database
-    if sqlite3_close_v2(db) != SQLITE_OK {
-        print("error closing database")
+    let result = sqlite3_close_v2(db)
+    if result != SQLITE_OK {
+        print(":ERROR: sqlQueryDetails(…) sqlite3 close result: \(result)")
     }
 
 }
