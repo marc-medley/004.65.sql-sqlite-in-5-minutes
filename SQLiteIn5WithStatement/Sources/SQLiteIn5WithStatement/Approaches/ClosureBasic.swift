@@ -1,13 +1,18 @@
 //
 //  ClosureBasic.swift
-//  SQLiteIn5WithSwift
+//  SQLiteIn5WithStatement
 //
 //  Created by marc on 2016.06.04.
 //  Copyright © 2016 --marc. All rights reserved.
 //
 
 import Foundation
-import SQLite3
+
+#if os(Linux)   // Linux, macOS
+  import CSQLite // Linux apt, macOS brew (provided via Package.swift)
+#else
+  import SQLite3 // macOS only (provided without Package.swift)
+#endif
 
 /// - parameter argc: C-style argument count
 /// - parameter argv: C-style argument values array

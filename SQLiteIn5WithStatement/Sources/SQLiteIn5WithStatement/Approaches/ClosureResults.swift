@@ -1,13 +1,18 @@
 //
 //  ClosureResults.swift
-//  SQLiteIn5WithSwift
+//  SQLiteIn5WithStatement
 //
 //  Created by marc on 2016.06.04.
 //  Copyright © 2016 --marc. All rights reserved.
 //
 
 import Foundation
-import SQLite3
+
+#if os(Linux)   // Linux, macOS
+  import CSQLite // Linux apt, macOS brew (provided via Package.swift)
+#else
+  import SQLite3 // macOS only (provided without Package.swift)
+#endif
 
 /// Query result as an array of rows. Each row is a Dictionary of column:value pairs.
 class Result {

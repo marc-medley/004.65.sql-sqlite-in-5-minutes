@@ -1,41 +1,24 @@
 # 004.65.sql-sqlite-in-5-minutes
 
-Based on ["SQLite in 5 minutes or less"](https://sqlite.org/quickstart.html) at [sqlite.org](https://sqlite.org/).  This implementation is for Swift 2.2.
+Based on ["SQLite in 5 minutes or less"](https://sqlite.org/quickstart.html) at [sqlite.org](https://sqlite.org/).  This implementation is in the process of being updated for Swift 5.7.
 
-Updated for Swift 4 and Xcode 9
+## Package Setup
 
-## Xcode Project Setup
-
-1. **New Swift Project.** Xcode > File > New > Project… > OS X Command Line Tool
-2. **Add Bridging Header.**
-
-    ``` c
-    #ifndef Bridging_Header_h
-    #define Bridging_Header_h
-
-    #import "sqlite3.h"
-    #import <time.h>
-
-    #endif /* Bridging_Header_h */
-    ```
-
-    ![](README_files/BridgeHeaderProjectSetting.png)
-
-3. **Link Libraries.** Project Settings > TARGETS > Build Phases > Link Binary With Libraries `+`. Search on sqlite.
-
-    ![](README_files/LinkBinaryWithLibraries.png)
+> :WIP:
 
 ## Code
 
-Each file contains a varied approach for accessing an SQLite database using Swift.
+Each file contains a _different approach for the same task_ of accessing an SQLite database using Swift. The file `main.swift` exercises each of the approaches:  
 
-• `main.swift` - exercises all of the approaches.  
 • `CallbackBasic.swift` - closest to sqlite.org example. _C style._  
 • `ClosureBasic.swift` - replaces `callback` function with literal closure. _C style._  
 • `ClosureResults.swift` - return `Array` of gathered row `Dictionaries`. _Swift style._  
 • `Command.swift` - execute an SQL statement which does not return any row data.  
 • `Details.swift` - example with prepare, step, column, and finalize.  
 • `SqlQuery.swift` - example `class` with prepare, bind, step, column, and finalize.  
+
+
+
 
 **`main.swift`** Provides `typealias` used by each example.
 

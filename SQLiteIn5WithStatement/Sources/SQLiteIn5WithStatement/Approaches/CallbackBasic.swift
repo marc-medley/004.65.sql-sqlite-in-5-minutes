@@ -6,7 +6,12 @@
 //
 
 import Foundation
-import SQLite3
+
+#if os(Linux)   // Linux, macOS
+  import CSQLite // Linux apt, macOS brew (provided via Package.swift)
+#else
+  import SQLite3 // macOS only (provided without Package.swift)
+#endif
 
 /// callback function pointer needs to be a global level function
 func callback(
